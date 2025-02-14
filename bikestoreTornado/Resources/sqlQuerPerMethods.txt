@@ -1,0 +1,96 @@
+
+//private void GetCurrentBikeID()
+//SQL Query Extracted:
+
+SELECT BikeID FROM Bikes 
+WHERE BikeTypeID = @BikeTypeID 
+  AND ColorID = @ColorID 
+  AND SizeID = @SizeID 
+  AND SupplierID = @SupplierID;
+  
+// This SQL query retrieves the BikeID from the Bikes table based on the selected type, color, size, and supplier. 
+// The parameters are passed securely to prevent SQL injection. If no matching bike is found, it returns null. 
+
+//private void PopulateQuantityComboBox(int bikeID)
+//SQL Query Extracted:
+
+SELECT Quantity FROM Quantity WHERE BikeID = @BikeID;
+
+//This SQL query retrieves the available Quantity of a bike from the Quantity table, based on the provided BikeID. 
+//The quantity value is used to populate a ComboBox with available quantities (from 1 to the retrieved quantity).
+
+//private void sendTriggerIf(int bikeID)
+//SQL Query Extracted:
+
+SELECT Quantity FROM Quantity WHERE BikeID = @BikeID;
+
+//Retrieves the current stock quantity of a specific bike from the Quantity table based on the given BikeID.
+
+INSERT INTO SupplierOrders (SupplierOrderDate, BikeID, SupplierID, SupplierName, Country, SupplierPrice, Quantity)
+VALUES (@SupplierOrderDate, @BikeID, @SupplierID, @SupplierName, @Country, @SupplierPrice, @Quantity);
+
+//Retrieves supplier details (SupplierID, SupplierName, Country) and the bike's supplier price 
+//from the Bikes and Suppliers tables for the given BikeID.
+
+INSERT INTO SupplierOrders (SupplierOrderDate, BikeID, SupplierID, SupplierName, Country, SupplierPrice, Quantity)
+VALUES (@SupplierOrderDate, @BikeID, @SupplierID, @SupplierName, @Country, @SupplierPrice, @Quantity);
+
+//Inserts a new supplier order into the SupplierOrders table, including the order date, 
+//BikeID, SupplierID, supplier details, price, and quantity.
+
+//private void SaveOrderToDatabase(OrderData order)
+//SQL Query Extracted:
+
+INSERT INTO Orders (OrderDate, CustomerID) 
+OUTPUT INSERTED.OrderID 
+VALUES (@OrderDate, (SELECT CustomerID FROM Customers WHERE FullName = @CustomerName));
+
+//Inserts a new order into the Orders table and retrieves the generated OrderID. 
+The CustomerID is fetched using the FullName from the Customers table.
+
+INSERT INTO OrderDetails (OrderDate, CustomerID, OrderID, BikeID, Quantity, UnitPrice) 
+VALUES (@OrderDate, (SELECT CustomerID FROM Customers WHERE FullName = @CustomerName), @OrderID, @BikeID, @Quantity, @UnitPrice);
+
+//Inserts order details into the OrderDetails table, linking the order to a specific customer and bike.
+
+UPDATE Quantity 
+SET Quantity = Quantity - @Quantity 
+WHERE BikeID = @BikeID;
+
+//Reduces the available stock quantity of the ordered bike in the Quantity table.
+
+//private void AddNewCustomer()
+//SQL Query Extracted:
+
+SELECT COUNT(*) FROM Customers WHERE FullName = @FullName;
+
+//Checks if a customer with the given FullName already exists in the Customers table.
+
+INSERT INTO Customers (FullName, Phone, Email) 
+VALUES (@FullName, @Phone, @Email);
+
+//Inserts a new customer record into the Customers table with the provided name, phone number, 
+//and email address. If the phone or email is empty, NULL is stored instead.
+
+//private void loadOrdPerCustButton_Click(object sender, EventArgs e)
+//SQL Query Extracted:
+
+SELECT o.OrderDate, c.FullName, b.BikeID, od.UnitPrice, od.Quantity, (od.Quantity * od.UnitPrice) AS TotalPrice
+FROM Orders o
+JOIN Customers c ON o.CustomerID = c.CustomerID
+JOIN OrderDetails od ON o.OrderID = od.OrderID
+JOIN Bikes b ON od.BikeID = b.BikeID
+WHERE c.CustomerID = @CustomerID;
+
+/*Retrieves all orders for a selected customer by joining the Orders, Customers, OrderDetails, and Bikes tables. It fetches:
+OrderDate (date of order)
+FullName (customer name)
+BikeID (ordered bike ID)
+UnitPrice (price per unit)
+Quantity (number of bikes ordered)
+TotalPrice (calculated as Quantity * UnitPrice)
+The result is displayed in orderDataGridView.
+*/
+
+
+
